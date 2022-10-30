@@ -24,7 +24,9 @@ export function Filters(props){
             isSaleFilter,
             onIsSaleChange,
             isInStockFilter,
-            onIsInStockChange } = props;
+            onIsInStockChange,
+            onChangeCategories,
+            checkedCategories } = props;
 
     const priceData = products.map( product => {
         return product.price;
@@ -51,8 +53,7 @@ export function Filters(props){
                 <IsNewSwitcherFilterComponent isNewFilter={isNewFilter} onIsNewChange={onIsNewChange} />
                 <SaleSwitcherFilterComponent  isSaleFilter={isSaleFilter} onIsSaleChange={onIsSaleChange} />
                 <IsInStockSwitcherFilterComponent onIsInStockChange={onIsInStockChange} isInStockFilter={isInStockFilter} />
-                <CategoriesFilterComponent categories={categories}/>
-                
+                <CategoriesFilterComponent checkedCategories={checkedCategories} onChangeCategories={onChangeCategories} categories={categories}/>
             </Box>
         </Box>
     )

@@ -1,4 +1,4 @@
-import React,{ useState, useEffect, useCallback } from "react";
+import React,{ useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import { Filters } from "../components/Filters";
 import { Loader } from "../components/Loader";
@@ -10,12 +10,21 @@ export function CatalogPage() {
     const [error, setError] = useState(null);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
+    const [filtredProducts, setFiltredProducts] = useState([]);
     const [search, setSearch] = useState('');
     const [priceFilter, setPriceFilter] = useState([0,1000]);
     const [ratingFilter, setRatingFilter] = useState([0,100]);
     const [isNewFilter, setIsNewFilter] = useState(false);
     const [isSaleFilter, setIsSaleFilter] = useState(false);
     const [isInStockFilter, setIsInStockFilter] = useState(false);
+    const [checkedCategories, setCheckedCategories] = useState([]);
+
+    const categoriesData = useMemo(() => {
+        return categories.filter(category => {
+            return checkedCategories.includes(category.name);
+        }).map( item => item.id )
+    },[categories,checkedCategories])
+
 
     const onSearch = useCallback((newSearch) => {
         setSearch(newSearch)
@@ -40,6 +49,10 @@ export function CatalogPage() {
     const onIsInStockChange = useCallback((newValue) => {
         setIsInStockFilter(newValue)
     },[setIsInStockFilter])
+
+    const onChangeCategories = useCallback((newCategory) => {
+            setCheckedCategories(newCategory)
+    },[setCheckedCategories])
 
     // const fetchData = () => {
 
@@ -108,16 +121,43 @@ export function CatalogPage() {
         };
     },[])
 
-    const filtredItems = products.filter(el => {
-        // console.log(el.id)
-                if(el.price <= priceFilter[0] || el.price >= priceFilter[1]) return false; 
-                if(el.rating <= ratingFilter[0] || el.rating >= ratingFilter[1]) return false; 
-                if(!el.isNew && isNewFilter) return false; 
-                if(!el.isSale && isSaleFilter) return false; 
-                if(!el.isInStock && isInStockFilter) return false; 
-                if(el.title.toLowerCase().indexOf(search.toLowerCase())<0) return false;
-                return true;
-            })
+    // useEffect( () => {
+    //     console.log({checkedCategories,priceFilter,ratingFilter,isNewFilter,isSaleFilter,isInStockFilter,search})
+    //     console.log(filtredProducts)
+    //     const filtredItems = products.filter(el => {
+    //     // console.log(el.id)
+    //             if(el.price <= priceFilter[0] || el.price >= priceFilter[1]) return false; 
+    //             if(el.rating <= ratingFilter[0] || el.rating >= ratingFilter[1]) return false; 
+    //             if(!el.isNew && isNewFilter) return false; 
+    //             if(!el.isSale && isSaleFilter) return false; 
+    //             if(!el.isInStock && isInStockFilter) return false; 
+    //             if(!(el.categories.some(item => categoriesData.includes(item)))) return false; 
+    //             if(el.title.toLowerCase().indexOf(search.toLowerCase())<0) return false;
+    //             return true;
+    //         })
+    //     if(checkedCategories.length === 0) {
+    //         setFiltredProducts(products)
+    //     }else if(search.length === 0){
+    //         setFiltredProducts(products)
+    //     }else {
+    //         setFiltredProducts(filtredItems)
+    //     }
+        
+    // },[checkedCategories,priceFilter,ratingFilter,isNewFilter,isSaleFilter,isInStockFilter,search])
+
+    const filtredItems = useMemo(()=> {
+        console.log('products')
+        return products.filter(el => {
+            if(el.price <= priceFilter[0] || el.price >= priceFilter[1]) return false; 
+            if(el.rating <= ratingFilter[0] || el.rating >= ratingFilter[1]) return false; 
+            if(!el.isNew && isNewFilter) return false; 
+            if(!el.isSale && isSaleFilter) return false; 
+            if(!el.isInStock && isInStockFilter) return false; 
+            if(!(el.categories.some(item => categoriesData.includes(item))) && categoriesData.length!==0) return false; 
+            if(el.title.toLowerCase().indexOf(search.toLowerCase())<0) return false;
+            return true;
+        })
+    },[products,priceFilter,ratingFilter,isNewFilter,isSaleFilter,categoriesData,search,isInStockFilter])
 
     // const fetchData = async (mountState) => {
     //     setStatus('loading')
@@ -175,7 +215,9 @@ export function CatalogPage() {
                                 isInStockFilter={isInStockFilter}
                                 onIsInStockChange={onIsInStockChange}
                                 products={products} 
-                                categories={categories}/>
+                                categories={categories}
+                                checkedCategories={checkedCategories}
+                                onChangeCategories={onChangeCategories}/>
                             <ProductsList 
                                 status={status} 
                                 error={error} 

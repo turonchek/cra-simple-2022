@@ -4,12 +4,11 @@ import AddIcon from '@mui/icons-material/Add';
 
 export function CategoriesFilterComponent(props){
 
-    const { categories } = props;
+    const { categories, checkedCategories, onChangeCategories } = props;
+    // console.log(categories)
 
     const [isOpenCategories, setIsOpenCategories] = useState(false);
-    const [checkedCategories, setCheckedCategories] = useState([]);
     
-
     const handleChangeCategories = useCallback((e) => {
         const { value } = e.currentTarget;
         let newCategory;
@@ -18,11 +17,9 @@ export function CategoriesFilterComponent(props){
             }else {
                 newCategory = [...checkedCategories,value];
             }
-            setCheckedCategories(newCategory)
-    },[checkedCategories,setCheckedCategories])
-
+            onChangeCategories(newCategory)
+    },[checkedCategories,onChangeCategories])
     
-
     return(
         <Box className="filters-block categories" sx={{ m:10 }} >
                     <Box className="filters-block-data">
@@ -40,7 +37,7 @@ export function CategoriesFilterComponent(props){
                                                         <ListItem key={category.id} className="filters-block-data-list__item">
                                                             <FormControlLabel
                                                             control={
-                                                                <Checkbox checked={checkedCategories.includes(category.name)} value={category.name} onChange={handleChangeCategories} name={category.name} />
+                                                                <Checkbox checked={checkedCategories.includes(category.name)} id={category.id} value={category.name} onChange={handleChangeCategories} name={category.name} />
                                                                 }
                                                                 label={category.name}
                                                                 />
