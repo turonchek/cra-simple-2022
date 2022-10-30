@@ -1,10 +1,10 @@
 import React from "react";
 
-export function RegisterPage() {
+export function DeliveryPage() {
 
     return(
             <div>
-                Register Page
+                Shipping and payment Page
             </div>
     )
 }

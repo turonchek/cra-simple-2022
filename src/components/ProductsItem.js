@@ -1,8 +1,9 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, ListItem, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Rating, Typography } from "@mui/material";
 import React from "react";
 
 export function ProductsItem(props) {
-    const { image_link, name, brand, description, api_featured_image, price, price_sign } = props;
+    const { id, title, description, price, photo, isNew, isSale, isInStock, rating, ratingData } = props;
+
     return (
         
             <Card sx={{height:"100%"}}>
@@ -12,24 +13,43 @@ export function ProductsItem(props) {
                         // width={300}
                         // height= 'auto'
                         // object-fit= 'cover'
-                        image={api_featured_image}
-                        alt={name}
+                        image={photo}
+                        alt={title}
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component='h3'>
-                            {brand}
+                        {isNew && <Box sx={{m:10}}>
+                                    <Typography fontSize={10} variant="body3" component='span' color="text.primary">
+                                        New!!!
+                                    </Typography>
+                                </Box>}
+                        <Typography gutterBottom variant="h5" component='h5'>
+                            {title}
                         </Typography>
-                        <Typography gutterBottom variant="h5" component='h4'>
-                            {name}
+                        {isSale && <Box sx={{m:10}}>
+                                    <Typography fontSize={20} variant="body3" component='span' color="text.primary">
+                                        SALE!!
+                                    </Typography>
+                                </Box>}
+                        <Typography gutterBottom>
+                            {description}
                         </Typography>
                         {/* <Typography dangerouslySetInnerHTML={{__html: description}} sx={{mt:'10'}} textAlign="center" variant="body2" color="text.secondary"> */}
                             {/* {description} */}
                         {/* </Typography> */}
-                        <Box sx={{m:10}}>
-                            <Typography fontSize={30} variant="body1" component='span' color="text.primary">
-                                {price}{price_sign}
-                            </Typography>
-                        </Box>
+                        {isInStock ? ( 
+                            <Box sx={{m:10}}>
+                                <Typography fontSize={30} variant="body1" component='span' color="text.primary">
+                                    {price}$
+                                </Typography>
+                            </Box>
+                        ) : ( 
+                            <Box sx={{m:10}}>
+                                <Typography fontSize={20} variant="body3" component='span' color="text.primary">
+                                    Out of stock
+                                </Typography>
+                            </Box>
+                        )}
+                        <Rating name="half-rating-read" max={5} precision={0.1} defaultValue={rating/10} readOnly />
                     </CardContent>
                 </CardActionArea>
             </Card>

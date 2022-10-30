@@ -35,30 +35,36 @@ export function DrawerComponent() {
             onClose={() => setOpenDrawer(false)}
         >
             <List>
-            <ListItem onClick={() => setOpenDrawer(false)}>
-                <ListItemText>
-                <Link to="/" className={classes.link}>Main Page</Link>
-                </ListItemText>
-            </ListItem>
-            <Divider/>
-            <ListItem onClick={() => setOpenDrawer(false)}>
-                <ListItemText>
-                    <Link to="/products" className={classes.link}>Products</Link>
-                </ListItemText>
-            </ListItem>
-            <Divider/>
-            <ListItem onClick={() => setOpenDrawer(false)}>
-                <ListItemText>
-                    <Link to="/register" className={classes.link}>Sign up</Link>
-                </ListItemText>
-            </ListItem>
-            <Divider/>
-            <ListItem onClick={() => setOpenDrawer(false)}>
-                <ListItemText>
-                    <Link to="/login" className={classes.link}>Log in</Link>
-                </ListItemText>
-            </ListItem>
-            <Divider/>
+                <ListItem onClick={() => setOpenDrawer(false)}>
+                    <ListItemText>
+                    <Link to="/" className={classes.link}>Main Page</Link>
+                    </ListItemText>
+                </ListItem>
+                <Divider/>
+                <ListItem onClick={() => setOpenDrawer(false)}>
+                    <ListItemText>
+                        <Link to="/products" className={classes.link}>Products</Link>
+                    </ListItemText>
+                </ListItem>
+                <Divider/>
+                <ListItem onClick={() => setOpenDrawer(false)}>
+                    <ListItemText>
+                        <Link to="/register" className={classes.link}>Sign up</Link>
+                    </ListItemText>
+                </ListItem>
+                <Divider/>
+                <ListItem onClick={() => setOpenDrawer(false)}>
+                    <ListItemText>
+                        <Link to="/login" className={classes.link}>Log in</Link>
+                    </ListItemText>
+                </ListItem>
+                <Divider/>
+                <ListItem onClick={() => setOpenDrawer(false)}>
+                    <ListItemText>
+                        <Link to="/register" className={classes.link}>Sign up</Link>
+                    </ListItemText>
+                </ListItem>
+                <Divider/>
             </List>
         </Drawer>
         <IconButton onClick={() => setOpenDrawer(!openDrawer)} className={classes.icon}>

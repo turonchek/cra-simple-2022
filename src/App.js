@@ -1,13 +1,12 @@
-import { Typography } from '@mui/material';
 import React from 'react';
 import { Header } from './components/Header';
 import { Routes, Route } from 'react-router-dom';
-import { MainPage } from './pages/MainPage';
-import { ProductsPage } from './pages/ProductsPage';
+import { AboutPage } from './pages/AboutPage';
+import { CatalogPage } from './pages/CatalogPage';
 import { ProductsItemPage } from './pages/ProductsItemPage';
-import { RegisterPage } from './pages/RegisterPage';
-import { LoginPage } from './pages/LoginPage';
+import { DeliveryPage } from './pages/DeliveryPage';
 import { CartPage } from './pages/CartPage';
+import { OrderPage } from './pages/OrderPage';
 
 
 export function App() {
@@ -15,12 +14,12 @@ export function App() {
       <div className="app">
         <Header/>
         <Routes>
-          <Route path='/' element={<MainPage/>} />
-          <Route path='/products' element={<ProductsPage/>} />
-          <Route path='/products/:id' element={<ProductsItemPage/>} />
-          <Route path='/register' element={<RegisterPage/>} />
-          <Route path='/login' element={<LoginPage/>} />
+          <Route path='/' element={<AboutPage/>} />
+          <Route path='/catalog' element={<CatalogPage/>} />
+          <Route path='/catalog/:id' element={<ProductsItemPage/>} />
+          <Route path='/delivery' element={<DeliveryPage/>} />
           <Route path='/cart' element={<CartPage/>} />
+          <Route path='/order' element={<OrderPage/>} />
         </Routes>
       </div>
   );

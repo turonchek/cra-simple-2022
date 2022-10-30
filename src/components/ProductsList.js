@@ -1,68 +1,30 @@
-import { Box, Grid, List } from "@mui/material";
+import { Box, Grid, List, Typography } from "@mui/material";
 import React,{ useState, useEffect } from "react";
 import { ProductsItem } from "./ProductsItem";
 
-export function ProductsList(){
+export function ProductsList(props){
 
-    const [status, setStatus] = useState('initial');
-    const [error, setError] = useState(null);
-    const [data, setData] = useState([]);
+    const { products } = props;
 
-    const fetchData = async (mountState) => {
-        setStatus('loading')
-        setError(null)
-        setData([])
-
-        try{
-            const response = await fetch(`https://makeup-api.herokuapp.com/api/v1/products.json`);
-            const json = await response.json();
-            if(mountState.isMount){
-                console.log(json)
-                setStatus('success')
-                setData(json)
-                setError(null)
-            }
-        } catch (error){
-            if(mountState.isMount){
-                setStatus(error)
-                setError(error.message)
-            }
-            
-        }
-    };
-
-    useEffect(() => {
-        let mountState = {
-            isMount:true,
-        };
-        fetchData(mountState);
-        return ()=>{
-            mountState.isMount = false;
-        }
-    }, []);
-
+    const ratingData = products.map( product => {
+        return product.rating;
+    })
 
     return(
-        <Box className="products-list-wrap">
-            {status === 'loading' || status === 'initial' ? (
-                <Box>Loading...</Box>
-            ) : (
-                <>
-                    {error===null ? (
-                        
+        <Box  sx={{
+                width:'75%', 
+                display:'inline-block',
+                verticalAlign: 'top',
+                }} 
+            className="products-list-wrap">
+                            <Typography>Catalog</Typography>
                             <Grid container spacing={10} alignItems="stretch">
-                            {data.map(product => (
-                                <Grid key={product.id} item xs={4} md={3} lg={2.4}>
-                                    <ProductsItem key={product.id} {...product}/>
+                            {products.map(product => (
+                                <Grid key={product.id} item xs={6} md={4} lg={4} xl={4}>
+                                    <ProductsItem ratingData={ratingData} {...product}/>
                                 </Grid>
                             ))}
                             </Grid>
-                        
-                    ) : (
-                        <span style={{ color: 'red' }}>{error}</span>
-                    )}
-                </>
-            )}
         </Box>
     )
 }
