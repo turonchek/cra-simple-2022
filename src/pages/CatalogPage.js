@@ -1,8 +1,11 @@
-import React,{ useState, useEffect, useCallback, useMemo } from "react";
+import React,{ useState, useEffect, useCallback, useMemo, useReducer } from "react";
 import axios from "axios";
 import { Filters } from "../components/Filters";
-import { Loader } from "../components/Loader";
+// import { Loader } from "../components/Loader";
 import { ProductsList } from "../components/ProductsList";
+// import { ACTION_TYPES } from "../services/dataActionTypes";
+// import { INITIAL_STATE, dataReducer } from "../services/dataReducer";
+
 
 export function CatalogPage() {
 
@@ -10,7 +13,6 @@ export function CatalogPage() {
     const [error, setError] = useState(null);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
-    const [filtredProducts, setFiltredProducts] = useState([]);
     const [search, setSearch] = useState('');
     const [priceFilter, setPriceFilter] = useState([0,1000]);
     const [ratingFilter, setRatingFilter] = useState([0,100]);
@@ -19,10 +21,15 @@ export function CatalogPage() {
     const [isInStockFilter, setIsInStockFilter] = useState(false);
     const [checkedCategories, setCheckedCategories] = useState([]);
 
+    // const [{loading,categories,products,error}, dispatch] = useReducer(dataReducer, INITIAL_STATE);
+    // console.log({loading,categories,products,error})
+    // console.log(`categories`,categories.data)
+    // console.log(`products`,products.data)
+
     const categoriesData = useMemo(() => {
-        return categories.filter(category => {
-            return checkedCategories.includes(category.name);
-        }).map( item => item.id )
+            return categories.filter(category => {
+                return checkedCategories.includes(category.name);
+            }).map( item => item.id )
     },[categories,checkedCategories])
 
 
@@ -53,40 +60,6 @@ export function CatalogPage() {
     const onChangeCategories = useCallback((newCategory) => {
             setCheckedCategories(newCategory)
     },[setCheckedCategories])
-
-    // const fetchData = () => {
-
-    //     const source = axios.CancelToken.source();
-
-        
-
-    //     setStatus('loading');
-    //     setError(null)
-    //     setCategories([]);
-    //     setProducts([]);
-    //     const categoriesUrl = 'https://61f5558a62f1e300173c40f3.mockapi.io/categories';
-    //     const productsUrl = 'https://61f5558a62f1e300173c40f3.mockapi.io/products';
-
-    //     const getCategories = axios.get(categoriesUrl,{ cancelToken: source.token});
-    //     const getProducts = axios.get(productsUrl,{ cancelToken: source.token});
-
-    //     axios.all([getCategories,getProducts]).then(axios.spread((...allData) => {
-    //             const allCategoriesData = allData[0].data;
-    //             const allProductsData = allData[1].data;
-
-    //             setStatus('success')
-    //             setCategories(allCategoriesData);
-    //             setProducts(allProductsData);
-    //             setError(null)
-    //         })
-    //     )
-    //     .catch(error => {
-    //         setCategories(null);
-    //         setProducts(null);
-    //         setStatus(error)
-    //         setError(error.message)
-    //     })
-    // }
 
     useEffect( () => {
         const CancelToken = axios.CancelToken;
@@ -145,18 +118,39 @@ export function CatalogPage() {
         
     // },[checkedCategories,priceFilter,ratingFilter,isNewFilter,isSaleFilter,isInStockFilter,search])
 
+    // useEffect( () => {
+    //     const CancelToken = axios.CancelToken;
+    //     const source = CancelToken.source();
+    //     dispatch({ type: ACTION_TYPES.FETCH_START });
+    //     const categoriesUrl = 'https://61f5558a62f1e300173c40f3.mockapi.io/categories';
+    //     const productsUrl = 'https://61f5558a62f1e300173c40f3.mockapi.io/products';
+
+    //     const getCategories = axios.get(categoriesUrl,{ cancelToken: source.token});
+    //     const getProducts = axios.get(productsUrl,{ cancelToken: source.token});
+
+    //     axios.all([getCategories,getProducts]).then(axios.spread((...allData) => {
+    //         dispatch({ type: ACTION_TYPES.FETCH_SUCCESS, payload: allData });
+    //         })
+    //     )
+    //     .catch(error => {
+    //         dispatch({ type: ACTION_TYPES.FETCH_ERROR });
+    //     })
+    //     return () => {
+    //         source.cancel();
+    //     };
+    // },[])
+
     const filtredItems = useMemo(()=> {
-        console.log('products')
-        return products.filter(el => {
-            if(el.price <= priceFilter[0] || el.price >= priceFilter[1]) return false; 
-            if(el.rating <= ratingFilter[0] || el.rating >= ratingFilter[1]) return false; 
-            if(!el.isNew && isNewFilter) return false; 
-            if(!el.isSale && isSaleFilter) return false; 
-            if(!el.isInStock && isInStockFilter) return false; 
-            if(!(el.categories.some(item => categoriesData.includes(item))) && categoriesData.length!==0) return false; 
-            if(el.title.toLowerCase().indexOf(search.toLowerCase())<0) return false;
-            return true;
-        })
+            return products.filter(el => {
+                if(el.price <= priceFilter[0] || el.price >= priceFilter[1]) return false; 
+                if(el.rating <= ratingFilter[0] || el.rating >= ratingFilter[1]) return false; 
+                if(!el.isNew && isNewFilter) return false; 
+                if(!el.isSale && isSaleFilter) return false; 
+                if(!el.isInStock && isInStockFilter) return false; 
+                if(!(el.categories.some(item => categoriesData.includes(item))) && categoriesData.length!==0) return false; 
+                if(el.title.toLowerCase().indexOf(search.toLowerCase())<0) return false;
+                return true;
+            })
     },[products,priceFilter,ratingFilter,isNewFilter,isSaleFilter,categoriesData,search,isInStockFilter])
 
     // const fetchData = async (mountState) => {
@@ -194,12 +188,12 @@ export function CatalogPage() {
 
     return(
         <>
-        {status === 'loading' || status === 'initial' ? (
+        {status==='loading' || status==='initial' ? (
                 // <Loader/>
                 <div>Loading</div>
             ) : (
                 <>
-                    {error===null ? (
+                    {!error ? (
                             <>
                             <Filters 
                                 search={search} 

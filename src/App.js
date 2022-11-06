@@ -7,6 +7,7 @@ import { ProductsItemPage } from './pages/ProductsItemPage';
 import { DeliveryPage } from './pages/DeliveryPage';
 import { CartPage } from './pages/CartPage';
 import { OrderPage } from './pages/OrderPage';
+import { Page404 } from './pages/Page404';
 
 
 export function App() {
@@ -20,6 +21,7 @@ export function App() {
           <Route path='/delivery' element={<DeliveryPage/>} />
           <Route path='/cart' element={<CartPage/>} />
           <Route path='/order' element={<OrderPage/>} />
+          <Route path='*' element={<Page404/>} />
         </Routes>
       </div>
   );

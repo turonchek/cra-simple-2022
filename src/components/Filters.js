@@ -28,6 +28,8 @@ export function Filters(props){
             onChangeCategories,
             checkedCategories } = props;
 
+            console.log(products)
+
     const priceData = products.map( product => {
         return product.price;
     })
