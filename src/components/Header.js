@@ -7,7 +7,8 @@ import {
     useMediaQuery, 
     IconButton,
     Button,
-    Box} from "@mui/material";
+    Box,
+    Badge} from "@mui/material";
 import InputBase from '@mui/material/InputBase';
 import { styled, alpha } from '@mui/material/styles';
 import { makeStyles } from "@mui/styles";
@@ -15,6 +16,8 @@ import { Link } from "react-router-dom";
 import { DrawerComponent } from "./DrawerComponent";
 import SearchIcon from '@mui/icons-material/Search';
 import { ShoppingCart } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { selectCart } from "../ducks/cart";
 
 const useStyles = makeStyles((theme) => ({
     navlinks: {
@@ -92,6 +95,20 @@ export function Header() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
+    const cart = useSelector(selectCart)
+    console.log(cart)
+
+    const getTotalQuantity = () => {
+        let total = 0
+        cart.items.forEach(item => {
+            total += item.quantity
+        })
+        return total
+    }
+
+    // console.log(getTotalQuantity())
+
+
     return (
         <header>
             <Box sx={{mb:10}}>
@@ -154,7 +171,9 @@ export function Header() {
                                     Shipping and payment
                                 </Button>
                                 <IconButton className={classes.icon} component={Link} to="/cart" >
-                                    <ShoppingCart/>
+                                    <Badge badgeContent={getTotalQuantity()} color="secondary">
+                                        <ShoppingCart/>
+                                    </Badge>
                                 </IconButton>
                             </Box>
                             )}

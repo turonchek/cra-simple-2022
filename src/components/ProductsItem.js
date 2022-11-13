@@ -1,8 +1,11 @@
 import { Box, Button, Card, CardActionArea, CardContent, CardMedia, Rating, Typography } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { addToCart } from "../ducks/cart";
 
 export function ProductsItem(props) {
+    const dispatch = useDispatch();
     const { id, title, description, price, photo, isNew, isSale, isInStock, rating, ratingData } = props;
 
     return (
@@ -41,7 +44,10 @@ export function ProductsItem(props) {
                             </Box>
                         </CardContent>
                         {isInStock ? ( 
-                            <Button sx={{m:10}} variant="contained">Add to cart</Button>
+                            <Button 
+                                onClick={()=>dispatch(addToCart({id,title,photo,price}))}
+                                sx={{m:10}} 
+                                variant="contained">Add to cart</Button>
                         ) : ( 
                             <Box sx={{m:10}}>
                                 <Typography fontSize={20} variant="body3" component='span' color="text.primary">
