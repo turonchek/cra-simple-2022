@@ -1,10 +1,9 @@
 import React,{ useState, useEffect, useCallback, useMemo, useReducer } from "react";
 import axios from "axios";
 import { Filters } from "../components/Filters";
-// import { Loader } from "../components/Loader";
 import { ProductsList } from "../components/ProductsList";
-// import { ACTION_TYPES } from "../services/dataActionTypes";
-// import { INITIAL_STATE, dataReducer } from "../services/dataReducer";
+import { Pagination } from "../components/Pagination/Pagination";
+
 
 
 export function CatalogPage() {
@@ -20,11 +19,10 @@ export function CatalogPage() {
     const [isSaleFilter, setIsSaleFilter] = useState(false);
     const [isInStockFilter, setIsInStockFilter] = useState(false);
     const [checkedCategories, setCheckedCategories] = useState([]);
-
-    // const [{loading,categories,products,error}, dispatch] = useReducer(dataReducer, INITIAL_STATE);
-    // console.log({loading,categories,products,error})
-    // console.log(`categories`,categories.data)
-    // console.log(`products`,products.data)
+    const [currentItems, setCurrentItems] = useState([]);
+    const [pageCount, setPageCount] = useState(0);            
+    const [itemOffset, setItemOffset] = useState(0);            
+    const itemsPerPage = 6;            
 
     const categoriesData = useMemo(() => {
             return categories.filter(category => {
@@ -32,6 +30,7 @@ export function CatalogPage() {
             }).map( item => item.id )
     },[categories,checkedCategories])
 
+    
 
     const onSearch = useCallback((newSearch) => {
         setSearch(newSearch)
@@ -153,6 +152,17 @@ export function CatalogPage() {
             })
     },[products,priceFilter,ratingFilter,isNewFilter,isSaleFilter,categoriesData,search,isInStockFilter])
 
+    useEffect(() => {
+        const endOffset = itemOffset + itemsPerPage;
+        setCurrentItems(filtredItems.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(filtredItems.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, filtredItems])
+
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % filtredItems.length;
+        setItemOffset(newOffset);
+    }
+
     // const fetchData = async (mountState) => {
     //     setStatus('loading')
     //     setError(null)
@@ -215,7 +225,7 @@ export function CatalogPage() {
                             <ProductsList 
                                 status={status} 
                                 error={error} 
-                                products={filtredItems} />
+                                products={currentItems} />
                             </>
                         
                     ) : (
@@ -223,7 +233,10 @@ export function CatalogPage() {
                     )}
                 </>
             )}
-            
+            <Pagination 
+                handlePageClick={handlePageClick}
+                pageCount={pageCount}
+            />
         </>
     )
 }

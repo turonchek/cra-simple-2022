@@ -1,0 +1,28 @@
+.pagination{
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5rem;
+    font-size: 1.2rem;
+    gap:5px;
+}
+
+.page-link{
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-weight: 400;
+}
+
+.page-link:hover{
+    background-color: blueviolet;
+    color: #fff;
+}
+
+.active{
+    border-radius: 3px;
+    padding: 8px 15px;
+    background-color: blueviolet;
+    color: #fff;
+}
