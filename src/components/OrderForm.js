@@ -11,6 +11,7 @@ import { TextField as CustomTextField} from './TextField';
 export const OrderForm = () => {
 
     const { control, formState } = useFormContext();
+    
 
     return (
         <>
@@ -29,7 +30,7 @@ export const OrderForm = () => {
                     rules={{required:"This field is required"}}
                 />
                 <CustomTextField
-                    name='userEmail'
+                    name='email'
                     label="Email"
                     rules={{
                         required:"This field is required",
@@ -83,7 +84,7 @@ export const OrderForm = () => {
                 rules={{required:"This field is required"}}
                 />
                 <CustomTextField
-                    name='userPhone'
+                    name='phone'
                     label="Phone number"
                     rules={{
                         required:"This field is required",
@@ -104,7 +105,7 @@ export const OrderForm = () => {
                     autoComplete="address-line2"
                 />
                 <CustomTextField
-                    name='userCity'
+                    name='city'
                     label="City"
                     rules={{required:"This field is required"}}
                 />
